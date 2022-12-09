@@ -1,34 +1,64 @@
 import { Header } from "./components/Header";
 import { Main } from "./components/Main";
 import { Footer } from "./components/Footer";
+import { useEffect, useState } from "react";
+import { TodosList } from "./components/TodosList";
 
 function App() {
-  const todos = [
-    { title: "Learn React", completed: false },
-    { title: "Learn React2", completed: false },
-    { title: "Learn React3", completed: false },
-  ];
+  const [todos, setTodos] = useState([]);
+  const [todosLeftCount, setTodosLeftCount] = useState(0);
 
-  const title = "Todos List";
-  const placeholder = "What needs to be done?";
-  const itemsLeft = todos.filter((todo) => !todo.completed).length;
+  useEffect(() => {
+    const todosLeft = todos.filter(todo => !todo.completed)
+    setTodosLeftCount(todosLeft.length)
+  })
   
-  function pushTodo(title) {
-    todos.push({ title: title, completed: false });
-    console.log(todos);
+  const appTitle = "TodosList";
+
+  function addTodo(title) {
+    const newTodos = [...todos, { id: Date.now(), title: title, completed: false }];
+    setTodos(newTodos)
   }
 
-  function clearCompleted() {
-    const completedTodos = todos.filter((todo) => todo.completed);
-    completedTodos.forEach((todo) => todos.splice(todos.indexOf(todo), 1));
-    console.log(todos);
+  function removeTodo(todoToRemove) {
+    const newTodos = todos.filter(todo => todo.id !== todoToRemove.id);
+    setTodos(newTodos)
   }
+
+  function switchStatus(todo) {
+    todo.completed = !todo.completed;
+    setTodos([...todos])
+  }
+
+  function editTodoName(todoToChange, newName) {
+    todoToChange.title = newName
+    setTodos([...todos])
+  }
+  
+  function clearCompleted() {
+    const newTodos = todos.filter(todo => !todo.completed)
+    setTodos(newTodos)
+  }
+  
+  function toggleAllTodos(isToggleAllChecked) {
+    const newTodos = todos.map(todo => ({ ...todo, completed: isToggleAllChecked }))
+    setTodos(newTodos)
+  }
+
+  const isAllChecked = () => todos.every(todo => todo.completed)
 
   return (
     <section className="todoapp">
-      <Header pushTodo={pushTodo} title={title} placeholder={placeholder} />
-      <Main todos={todos} />
-      <Footer clearCompleted={clearCompleted} itemsLeft={itemsLeft} />
+      <Header title={appTitle} pushTodo={addTodo} text="What needs to be done?" />
+      <Main toggleAllTodos={toggleAllTodos} isAllChecked={isAllChecked}>
+        <TodosList
+          todos={todos}
+          switchStatus={switchStatus}
+          removeTodo={removeTodo}
+          editTodoName={editTodoName}
+        />
+      </Main>
+      <Footer clearCompleted={clearCompleted} todosLeft={todosLeftCount} />
     </section>
   );
 }

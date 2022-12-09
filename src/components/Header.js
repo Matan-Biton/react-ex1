@@ -1,5 +1,5 @@
 export function Header(props) {
-    const {pushTodo, title, placeholder} = props
+    const {title, pushTodo, text} = props
   function addTodo(event) {
     if (event.key === "Enter" && event.target.value) {
       pushTodo(event.target.value);
@@ -12,7 +12,7 @@ export function Header(props) {
       <h1>{title}</h1>
       <input
         className="new-todo"
-        placeholder={placeholder}
+        placeholder={text}
         autoFocus
         onKeyUp={addTodo}
       />

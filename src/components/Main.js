@@ -1,17 +1,15 @@
-import { TodosList } from "./TodosList";
-
-export function Main({ todos }) {
-  
-  function toggleAll() {
-    const targetState = !(todos.every((todo) => todo.completed));
-    todos.forEach((todo) => { todo.completed = targetState });
-    console.log();
-  }
+export function Main(props) {
+  const { toggleAllTodos, isAllChecked, children } = props;
 
   return (
     <section className="main">
-      <input className="toggle-all" type="checkbox" onClick={toggleAll}/>
-      <TodosList todos={todos} />
+      <input
+        className="toggle-all"
+        type="checkbox"
+        onClick={(event) => toggleAllTodos(event.target.checked)}
+        checked={isAllChecked()}
+      />
+      {children}
     </section>
   );
 }
