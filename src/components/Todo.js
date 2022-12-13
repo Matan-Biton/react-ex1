@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { todosContext } from "../providers/todosContext";
 
-export function Todo(props) {
-  const { switchStatus, removeTodo, editTodoName, todo } = props;
+export function Todo({todo}) {
+  const { toggleTodo, removeTodo, editTodoName } = useContext(todosContext);
   const [editFlag, setEditFlag] = useState(false)
 
   function handleEdit() {
@@ -15,7 +16,7 @@ export function Todo(props) {
           className="toggle"
           type="checkbox"
           checked={todo.completed}
-          onChange={() => switchStatus(todo)}
+          onChange={() => toggleTodo(todo)}
         />
         <label onDoubleClick={handleEdit}>{todo.title}</label>
         <button className="destroy" onClick={() => removeTodo(todo)} />

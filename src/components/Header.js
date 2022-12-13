@@ -1,8 +1,13 @@
+import { useContext } from "react";
+import { todosContext } from "../providers/todosContext";
+
 export function Header(props) {
-    const {title, pushTodo, text} = props
-  function addTodo(event) {
+  const { addTodo } = useContext(todosContext)
+  const { title, text } = props
+
+  function handleEnter(event) {
     if (event.key === "Enter" && event.target.value) {
-      pushTodo(event.target.value);
+      addTodo(event.target.value);
       event.target.value = "";
     }
   }
@@ -14,7 +19,7 @@ export function Header(props) {
         className="new-todo"
         placeholder={text}
         autoFocus
-        onKeyUp={addTodo}
+        onKeyUp={handleEnter}
       />
     </header>
   );

@@ -1,5 +1,8 @@
-export function Main(props) {
-  const { toggleAllTodos, isAllChecked, children } = props;
+import { useContext } from "react";
+import { todosContext } from "../providers/todosContext";
+
+export function Main({children}) {
+  const { toggleAllTodos, isAllChecked } = useContext(todosContext);
 
   return (
     <section className="main">
